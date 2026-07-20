@@ -1,2 +1,4 @@
-# GMTK2026
-The gamejam game of 2026
+# GameMaker's Toolkit 2026 Entry
+Lets go!
+
+More to follow...
