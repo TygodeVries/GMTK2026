@@ -6,8 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float topSpeed = 8f;
     [SerializeField] private float timeToTopSpeed = 1.5f;
-    [SerializeField] private InputAction moveAction;
 
+
+    [SerializeField] private InputAction moveAction;
 
     private Camera camera;
     private Rigidbody rb;
