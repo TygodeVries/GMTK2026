@@ -4,7 +4,7 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public int world_size = 10;
+    public int world_size = 100;
 
     public Object civilian_blueprint;
 
@@ -14,8 +14,7 @@ public class WorldManager : MonoBehaviour
     {
         velocity = new Vector2[world_size, world_size];
         boids_per_tile = new List<Boid>[world_size, world_size];
-        for (int cx = 0; cx < 200; cx ++)
-            Object.Instantiate(civilian_blueprint, new Vector3(Random.Range(0.0f, world_size),0, Random.Range(0.0f, world_size)), Quaternion.identity);
+
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
@@ -29,14 +28,22 @@ public class WorldManager : MonoBehaviour
     public Vector2 BumpWithWorld(Vector2 position)
     {
         Vector2 new_position = position;
-        if (position.x < 0.5f)
-            new_position.x = 0.5f;
-        if (position.x > world_size - 0.5f)
-            new_position.x = world_size - 0.5f;
-        if (position.y < 0.5f) 
-              new_position.y = 0.5f;
-        if (position.y > world_size - 0.5f)
-                new_position.y = world_size - 0.5f;
+        if (position.x < 0.2f)
+            new_position.x = 0.2f;
+        if (position.x > world_size - 0.2f)
+            new_position.x = world_size - 0.2f;
+        if (position.y < 0.2f) 
+              new_position.y = 0.2f;
+        if (position.y > world_size - 0.2f)
+                new_position.y = world_size - 0.2f;
+
+        // Get all BuildingBoundingBox objects
+        // transform the current position to the BBB space
+        // Project out of the BBB, reproject to world space
+       
+        
+
+        
         return new_position;
     }
     public List<Boid> getNearBoids(int x, int y)

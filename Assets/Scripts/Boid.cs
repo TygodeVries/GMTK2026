@@ -15,6 +15,7 @@ public class Boid : MonoBehaviour
     public Vector2 velocity;
     public Vector2 position;
     public float minimize_distance = 0.25f;
+    public float speed = .25f;
     List<(Vector3, Vector3)> debug_lines = new List<(Vector3, Vector3)>();
     // Update is called once per frame
     void LateUpdate()
@@ -26,7 +27,7 @@ public class Boid : MonoBehaviour
         int x = (int)position.x;
         int y = (int)position.y;
         bool iter = false;
-        int iter_count = 10;
+        int iter_count = 5;
         debug_lines.Clear();
         do
         {
@@ -53,7 +54,8 @@ public class Boid : MonoBehaviour
             velocity = 0.9f * velocity + 0.1f * tmp_velocity;
             velocity = velocity.normalized;
         }
-        position += velocity * Time.deltaTime;
+        position += velocity * Time.deltaTime * speed;
+        position = worldManager.BumpWithWorld(position);
         transform.position = new Vector3(position.x, 0, position.y);
     }
     private void OnDrawGizmos()
