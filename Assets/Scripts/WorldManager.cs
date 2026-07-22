@@ -15,6 +15,8 @@ public class WorldManager : MonoBehaviour
         velocity = new Vector2[world_size, world_size];
         boids_per_tile = new List<Boid>[world_size, world_size];
 
+        for (int cx = 0; cx < 100; cx ++)
+            GameObject.Instantiate(civilian_blueprint, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
@@ -40,10 +42,13 @@ public class WorldManager : MonoBehaviour
         // Get all BuildingBoundingBox objects
         // transform the current position to the BBB space
         // Project out of the BBB, reproject to world space
-       
-        
+       BuildingBoundingBox[] bbb_objects = Object.FindObjectsByType<BuildingBoundingBox>();
 
-        
+        foreach (BuildingBoundingBox bbb in bbb_objects)
+        {
+            new_position = bbb.Reproject(new_position);
+        }
+
         return new_position;
     }
     public List<Boid> getNearBoids(int x, int y)
