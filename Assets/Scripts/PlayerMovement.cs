@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
         camera = Camera.main;
     }
 
+
+
     private void Update()
     {
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
