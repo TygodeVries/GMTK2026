@@ -10,6 +10,6 @@ public class CameraController : MonoBehaviour
         if (targetTransform == null)
             return;
 
-        transform.position = targetTransform.position + offset;
+        transform.position = Vector3.Lerp(transform.position, targetTransform.position + offset, Time.deltaTime * 4);
     }
 }
