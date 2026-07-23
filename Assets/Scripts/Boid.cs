@@ -48,6 +48,11 @@ public class Boid : MonoBehaviour
             velocity = 0.9f * velocity + 0.1f * tmp_velocity;
             velocity = velocity.normalized;
         }
+        if (GetComponent<Eatable>() is Eatable eatable && eatable.eaten)
+        {
+            velocity = Vector2.zero;
+        }
+
         position += velocity * Time.deltaTime * speed;
         position = worldManager.BumpWithWorld(position);
         transform.position = new Vector3(position.x, 0, position.y);
