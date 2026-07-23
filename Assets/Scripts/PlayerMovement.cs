@@ -75,7 +75,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateEat()
     {
-        transform.position = Vector3.Lerp(transform.position, currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0), Time.deltaTime * 2);
+        Vector3 newPos = currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0);
+        newPos.y = transform.position.y;
+
+        transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2);
         modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
     }
     private void Eat()
