@@ -18,11 +18,12 @@ public class BuildingBoundingBox : MonoBehaviour
         Gizmos.DrawCube(new Vector3(), new Vector3(Size.x, 0, Size.y));
     }
 
-    public Vector2 Reproject(Vector2 x)
+    public Vector2 Reproject(Vector2 x, bool bVel = true)
     {
+        float minimum_distance = bVel ? this.minimum_distance : 0;
         Vector4 lx = transform.worldToLocalMatrix * new Vector4(x.x, 0, x.y, 1);
 
-        if (Mathf.Abs(lx.x) < Size.x / 2 && Mathf.Abs(lx.z) < Size.y / 2)
+        if (Mathf.Abs(lx.x) < Size.x / 2 + minimum_distance && Mathf.Abs(lx.z) < Size.y / 2 + minimum_distance)
         {
             // Project out of the bounding box
             if (Mathf.Abs(lx.x / Size.x) > Mathf.Abs(lx.z / Size.y))
