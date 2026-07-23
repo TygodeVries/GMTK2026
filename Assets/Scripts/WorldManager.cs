@@ -17,13 +17,13 @@ public class WorldManager : MonoBehaviour
         velocity = new Vector2[world_size, world_size];
         boids_per_tile = new List<Boid>[world_size, world_size];
 
-        for (int cx = 0; cx < 100; cx++)
+        for (int cx = 0; cx < 10; cx++)
         {
-            GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
-            GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
+            GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), 0, Random.Range(0, world_size)), Quaternion.identity);
+            GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size),0, Random.Range(0, world_size)), Quaternion.identity);
         }
         for (int cx = 0; cx < 10; cx++)
-            GameObject.Instantiate(cop, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
+            GameObject.Instantiate(cop, new Vector3(Random.Range(0, world_size), 0 , Random.Range(0, world_size)), Quaternion.identity);
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
@@ -37,14 +37,14 @@ public class WorldManager : MonoBehaviour
     public Vector2 BumpWithWorld(Vector2 position)
     {
         Vector2 new_position = position;
-        if (position.x < 0.2f)
-            new_position.x = 0.2f;
-        if (position.x > world_size - 0.2f)
-            new_position.x = world_size - 0.2f;
-        if (position.y < 0.2f) 
-              new_position.y = 0.2f;
-        if (position.y > world_size - 0.2f)
-                new_position.y = world_size - 0.2f;
+        if (position.x < 2f)
+            new_position.x = 2f;
+        if (position.x > world_size - 2f)
+            new_position.x = world_size - 2f;
+        if (position.y < 2f) 
+              new_position.y = 2f;
+        if (position.y > world_size - 2f)
+                new_position.y = world_size - 2f;
 
         // Get all BuildingBoundingBox objects
         // transform the current position to the BBB space
@@ -58,8 +58,10 @@ public class WorldManager : MonoBehaviour
 
         return new_position;
     }
-    public List<Boid> getNearBoids(int x, int y)
+    public List<Boid> getNearBoids(Vector2 p)
     {
+        int x = (int)p.x / 10;
+        int y = (int)p.y / 10;
         List<Boid> near_boids = new List<Boid>();
         for (int dx = -1; dx <= 1; dx++)
             for (int dy = -1; dy <= 1; dy++)
@@ -85,8 +87,8 @@ public class WorldManager : MonoBehaviour
         Boid[] boids = Object.FindObjectsByType<Boid>();
         foreach (Boid b in boids)
         {
-            int x = (int)b.position.x;
-            int y = (int)b.position.y;
+            int x = (int)b.position.x/10;
+            int y = (int)b.position.y/10;
 
             if (x >= 0 && x < world_size && y >= 0 && y < world_size)
             {

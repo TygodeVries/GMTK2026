@@ -8,7 +8,7 @@ public class Boid : MonoBehaviour
     void Start()
     {
         velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-        position = new Vector2(Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f)); // Needs to get worldsize
+        position = new Vector2(transform.position.x, transform.position.z ); // Needs to get worldsize
     }
     public Vector2 velocity;
     public Vector2 position;
@@ -22,15 +22,13 @@ public class Boid : MonoBehaviour
         
         Vector2 target_velocity = worldManager.GetTargetVelocity(position);
         Vector2 target_position = position + target_velocity / 10.0f;
-        int x = (int)position.x;
-        int y = (int)position.y;
         bool iter = false;
         int iter_count = 5;
         do
         {
             iter = false;
             target_position = worldManager.BumpWithWorld(target_position);
-            foreach (Boid b in worldManager.getNearBoids(x, y))
+            foreach (Boid b in worldManager.getNearBoids(position))
                 if (b != this)
                 {
                     Vector2 diff = b.position - target_position;
