@@ -5,8 +5,11 @@ public class Eatable : MonoBehaviour
 {
     [SerializeField] private GameObject censorPrefab;
 
+    public bool eaten;
+
     public void StartEat()
     {
+        eaten = true;
         StartCoroutine(Eat());
     }
 
@@ -21,7 +24,6 @@ public class Eatable : MonoBehaviour
         yield return new WaitForSeconds(3);
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
 
-        GetComponentInChildren<ParticleSystem>().Play();
         Destroy(
         transform.GetChild(0).gameObject
         );

@@ -67,28 +67,19 @@ public class PlayerMovement : MonoBehaviour
         if (rb.linearVelocity.magnitude > 0.2f)
             modelTransform.LookAt(modelTransform.position + rb.linearVelocity.normalized);
 
-        if (eatAction.WasPressedThisFrame())
-        {
-            Eat();
-        }
+        EatHeadsup();
     }
 
-    private void UpdateEat()
+    private void EatHeadsup()
     {
-        transform.position = Vector3.Lerp(transform.position, currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0), Time.deltaTime * 2);
-        modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
-    }
-    private void Eat()
-    {
-        Debug.Log("Yum");
-        float closest = 100000;
+
+
+        float closest = 10000;
         Eatable[] eatables = FindObjectsByType<Eatable>();
         Eatable closestEatable = null;
         foreach (Eatable eatable in eatables)
         {
             float dis = Vector3.Distance(eatable.transform.position, transform.position);
-
-            Debug.Log(dis);
             if (dis < closest)
             {
                 closest = dis;
@@ -96,11 +87,39 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (closest < 2)
+        float angle = Vector3.Angle(-closestEatable.transform.forward, transform.position - closestEatable.transform.position);
+
+        if (closest < 2 && angle < 45 && !closestEatable.eaten)
         {
-            currentlyEating = closestEatable;
-            currentlyEating.StartEat();
+            eatInput.SetActive(true);
+
+            if (eatAction.WasPressedThisFrame())
+            {
+                Eat(closestEatable);
+                eatInput.SetActive(false);
+            }
         }
+        else
+        {
+            eatInput.SetActive(false);
+        }
+    }
+
+    [SerializeField] private GameObject eatInput;
+
+
+    private void UpdateEat()
+    {
+        Vector3 newPos = currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0);
+        newPos.y = transform.position.y;
+
+        transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2);
+        modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
+    }
+    private void Eat(Eatable closestEatable)
+    {
+        currentlyEating = closestEatable;
+        currentlyEating.StartEat();
     }
 
     public Eatable currentlyEating = null;
