@@ -39,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
         {
             smokeIsPlaying = false;
             smokeSystem.Stop();
+
+            FindAnyObjectByType<ReturnHome>().Return();
         }
 
         if (spotTime > 0 && spotTime < maxSpotTime && !smokeIsPlaying)
@@ -72,8 +74,6 @@ public class PlayerMovement : MonoBehaviour
         {
             spotTime += Time.deltaTime * 2;
         }
-
-        Debug.Log(spotTime);
     }
 
     private float spotTime;
