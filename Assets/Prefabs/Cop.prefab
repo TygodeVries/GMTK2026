@@ -139,8 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Boid
   velocity: {x: 0, y: 0}
   position: {x: 0, y: 0}
-  minimize_distance: 0.15
-  speed: 0.35
+  minimize_distance: 1.5
+  speed: 3.5
   speed_weight: -10
 --- !u!114 &2768510884940061481
 MonoBehaviour:
