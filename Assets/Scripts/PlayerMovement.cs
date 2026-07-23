@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float topSpeed = 8f;
     [SerializeField] private float timeToTopSpeed = 1.5f;
 
+    [SerializeField] private Transform modelTransform;
 
     [SerializeField] private InputAction moveAction;
 
@@ -28,5 +29,8 @@ public class PlayerMovement : MonoBehaviour
         worldMovement.y = 0;
 
         rb.linearVelocity = worldMovement * topSpeed;
+
+        if (rb.linearVelocity.magnitude > 0.01f)
+            modelTransform.LookAt(transform.position + rb.linearVelocity);
     }
 }
