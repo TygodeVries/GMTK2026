@@ -24,8 +24,11 @@ public class Eatable : MonoBehaviour
         yield return new WaitForSeconds(3);
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
 
-        Destroy(
-        transform.GetChild(0).gameObject
-        );
+        if (transform.GetChild(0).GetComponent<Spotter>() != null)
+        {
+            Destroy(
+            transform.GetChild(0).gameObject
+            );
+        }
     }
 }

@@ -12,7 +12,7 @@ public class Floor : MonoBehaviour
             {
                 if (x == 0 && z == 0)
                     continue;
-                GameObject go = GameObject.Instantiate(pre, new Vector3(x * 10, 0, z * 10), Quaternion.identity);
+                GameObject go = GameObject.Instantiate(pre, new Vector3((x * 10) + 5, 0, (z * 10) + 5), Quaternion.identity);
                 go.transform.parent = transform;
             }
         }
