@@ -3,6 +3,19 @@ using UnityEngine;
 public class Coffin : MonoBehaviour
 {
     public int score;
+    [SerializeField] private Animator animator;
+    private Purse player;
+
+    private void Start()
+    {
+        player = FindAnyObjectByType<Purse>();
+    }
+
+    private void Update()
+    {
+        bool isNear = Vector3.Distance(player.transform.position, gameObject.transform.position) < 4;
+        animator.SetBool("IsOpen", isNear && player.goldInPurse != 0);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
