@@ -30,21 +30,38 @@ public class WorldManager : MonoBehaviour
         int x = (int)position.x;
         int y = (int)position.y;
         if (x >= 0 && x < world_size && y >= 0 && y < world_size)
-            return velocity[x, y];
+        {
+            float fx = position.x - x;
+            float fy = position.y - y;
+            int xo = Mathf.Min(x + 1, world_size - 1);
+            int yo = Mathf.Min(y + 1, world_size - 1);
+            float ofx = 1f - fx;
+            float ofy = 1f - fy;
+            
+
+            return 
+                velocity[x, y] * ofx * ofy +
+                velocity[x, yo] * ofx * fy +
+                velocity[xo, y] * fx * ofy +
+                velocity[xo, yo] * fx * fy;
+        }
         else
             return new Vector2(0, 0);
     }
-    public Vector2 BumpWithWorld(Vector2 position)
+    public Vector2 BumpWithWorld(Vector2 position, bool bVel = true)
     {
+        float offset = 2f;
+        if (bVel)
+            offset += 0.1f;
         Vector2 new_position = position;
-        if (position.x < 2f)
-            new_position.x = 2f;
-        if (position.x > world_size - 2f)
-            new_position.x = world_size - 2f;
-        if (position.y < 2f) 
-              new_position.y = 2f;
-        if (position.y > world_size - 2f)
-                new_position.y = world_size - 2f;
+        if (position.x < offset)
+            new_position.x = offset;
+        if (position.x > world_size - offset)
+            new_position.x = world_size - offset;
+        if (position.y < offset) 
+              new_position.y = offset;
+        if (position.y > world_size - offset)
+                new_position.y = world_size - offset;
 
         // Get all BuildingBoundingBox objects
         // transform the current position to the BBB space
@@ -87,17 +104,20 @@ public class WorldManager : MonoBehaviour
         Boid[] boids = Object.FindObjectsByType<Boid>();
         foreach (Boid b in boids)
         {
-            int x = (int)b.position.x/10;
-            int y = (int)b.position.y/10;
+            for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                {
 
-            if (x >= 0 && x < world_size && y >= 0 && y < world_size)
-            {
-                boids_per_tile[x, y].Add(b);
-                velocity[x, y] += b.velocity * b.speed_weight;
-                count[x, y]+=Mathf.Abs(b.speed_weight);
-            }
-            else // Boid is off grid...
-                GameObject.Destroy(b.gameObject);
+                    int x = (int)b.position.x / 10 + dx;
+                    int y = (int)b.position.y / 10 + dy;
+
+                    if (x >= 0 && x < world_size && y >= 0 && y < world_size)
+                    {
+                        boids_per_tile[x, y].Add(b);
+                        velocity[x, y] += b.velocity * b.speed_weight;
+                        count[x, y] += Mathf.Abs(b.speed_weight);
+                    }
+                }
         }
         for (int x = 0; x < world_size; x++)
             for (int y = 0; y < world_size; y++)
