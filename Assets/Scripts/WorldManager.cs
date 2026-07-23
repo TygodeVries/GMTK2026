@@ -8,6 +8,7 @@ public class WorldManager : MonoBehaviour
 
     public Object civilian_woman;
     public Object civilian_man;
+    public Object cop;
 
     Vector2[,] velocity;
     List<Boid>[,] boids_per_tile;
@@ -21,6 +22,8 @@ public class WorldManager : MonoBehaviour
             GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
             GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
         }
+        for (int cx = 0; cx < 10; cx++)
+            GameObject.Instantiate(cop, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
@@ -78,7 +81,7 @@ public class WorldManager : MonoBehaviour
                 boids_per_tile[x, y] = new List<Boid>();
             }
 
-        int[,] count = new int[world_size, world_size];
+        float[,] count = new float[world_size, world_size];
         Boid[] boids = Object.FindObjectsByType<Boid>();
         foreach (Boid b in boids)
         {
@@ -88,8 +91,8 @@ public class WorldManager : MonoBehaviour
             if (x >= 0 && x < world_size && y >= 0 && y < world_size)
             {
                 boids_per_tile[x, y].Add(b);
-                velocity[x, y] += b.velocity;
-                count[x, y]++;
+                velocity[x, y] += b.velocity * b.speed_weight;
+                count[x, y]+=Mathf.Abs(b.speed_weight);
             }
             else // Boid is off grid...
                 GameObject.Destroy(b.gameObject);

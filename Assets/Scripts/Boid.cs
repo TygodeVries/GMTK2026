@@ -14,6 +14,7 @@ public class Boid : MonoBehaviour
     public Vector2 position;
     public float minimize_distance = 0.25f;
     public float speed = .25f;
+    public float speed_weight = 1f;
     // Update is called once per frame
     void LateUpdate()
     {
