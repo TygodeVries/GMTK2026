@@ -6,7 +6,8 @@ public class WorldManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int world_size = 100;
 
-    public Object civilian_blueprint;
+    public Object civilian_woman;
+    public Object civilian_man;
 
     Vector2[,] velocity;
     List<Boid>[,] boids_per_tile;
@@ -15,8 +16,11 @@ public class WorldManager : MonoBehaviour
         velocity = new Vector2[world_size, world_size];
         boids_per_tile = new List<Boid>[world_size, world_size];
 
-        for (int cx = 0; cx < 100; cx ++)
-            GameObject.Instantiate(civilian_blueprint, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
+        for (int cx = 0; cx < 100; cx++)
+        {
+            GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
+            GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size), Random.Range(0, world_size), 0), Quaternion.identity);
+        }
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
