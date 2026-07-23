@@ -9947,7 +9947,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &3517395534611811629
@@ -10031,6 +10031,7 @@ MonoBehaviour:
       m_Action: Eat
       m_Flags: 0
     m_Flags: 0
+  eatInput: {fileID: 0}
   currentlyEating: {fileID: 0}
   maxSpotTime: 1.5
 --- !u!114 &3114544452679900283
