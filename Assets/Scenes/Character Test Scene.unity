@@ -510,6 +510,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188369007}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &223801625 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1446697583083052272, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
+  m_PrefabInstance: {fileID: 1987538777300497726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &223801629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223801625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed5edf8605014614894af7ba3abaea7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingBoundingBox
+  Size: {x: 2.38, y: 4.45}
+  minimum_distance: 1
 --- !u!1 &241224859
 GameObject:
   m_ObjectHideFlags: 0
@@ -7410,6 +7429,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 183728370176932361, guid: 21d64808d71a72343a98d38f79bb3206, type: 3}
+      propertyPath: tile_size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 183728370176932361, guid: 21d64808d71a72343a98d38f79bb3206, type: 3}
       propertyPath: world_size
       value: 100
       objectReference: {fileID: 0}
@@ -8035,7 +8058,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7840797718492705607, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 96768769}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1446697583083052272, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 223801629}
   m_SourcePrefab: {fileID: 100100000, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
 --- !u!1001 &3029114729811130755
 PrefabInstance:

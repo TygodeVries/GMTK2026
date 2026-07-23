@@ -1,23 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class V
+{
+    public static Vector3 W(Vector2 x)
+    {
+        return new Vector3(x.x, 0, x.y);
+    }
+}
+
 public class WorldManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int world_size = 100;
+    public int tile_size = 10;
 
     public Object civilian_woman;
     public Object civilian_man;
     public Object cop;
 
+    List<(Vector2, Vector2)> debug_lines = new List<(Vector2, Vector2)>();
+
     Vector2[,] velocity;
     List<Boid>[,] boids_per_tile;
     void Start()
     {
-        velocity = new Vector2[world_size, world_size];
-        boids_per_tile = new List<Boid>[world_size, world_size];
+        velocity = new Vector2[world_size/tile_size, world_size / tile_size];
+        boids_per_tile = new List<Boid>[world_size / tile_size, world_size / tile_size];
 
-        for (int cx = 0; cx < 10; cx++)
+        for (int cx = 0; cx < 25; cx++)
         {
             GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), 0, Random.Range(0, world_size)), Quaternion.identity);
             GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size),0, Random.Range(0, world_size)), Quaternion.identity);
@@ -27,14 +38,14 @@ public class WorldManager : MonoBehaviour
     }
     public Vector2 GetTargetVelocity(Vector2 position)
     {
-        int x = (int)position.x;
-        int y = (int)position.y;
-        if (x >= 0 && x < world_size && y >= 0 && y < world_size)
+        int x = (int)position.x/tile_size;
+        int y = (int)position.y/tile_size;
+        if (x >= 0 && x < world_size / tile_size && y >= 0 && y < world_size / tile_size)
         {
-            float fx = position.x - x;
-            float fy = position.y - y;
-            int xo = Mathf.Min(x + 1, world_size - 1);
-            int yo = Mathf.Min(y + 1, world_size - 1);
+            float fx = position.x/ tile_size - x;
+            float fy = position.y/ tile_size - y;
+            int xo = Mathf.Min(x + 1, world_size/tile_size - 1);
+            int yo = Mathf.Min(y + 1, world_size/tile_size - 1);
             float ofx = 1f - fx;
             float ofy = 1f - fy;
             
@@ -77,24 +88,26 @@ public class WorldManager : MonoBehaviour
     }
     public List<Boid> getNearBoids(Vector2 p)
     {
-        int x = (int)p.x / 10;
-        int y = (int)p.y / 10;
+        int x = (int)p.x / tile_size;
+        int y = (int)p.y / tile_size;
         List<Boid> near_boids = new List<Boid>();
         for (int dx = -1; dx <= 1; dx++)
             for (int dy = -1; dy <= 1; dy++)
             {
                 int nx = x + dx;
                 int ny = y + dy;
-                if (nx >= 0 && nx < world_size && ny >= 0 && ny < world_size)
+                if (nx >= 0 && nx < world_size / tile_size && ny >= 0 && ny < world_size / tile_size)
                     near_boids.AddRange(boids_per_tile[nx, ny]);
             }
         return near_boids;
     }
+
     // Update is called once per frame
     void Update()
     {
-        for (int x = 0; x < world_size; x++)
-            for (int y = 0; y < world_size; y++)
+        debug_lines.Clear();
+        for (int x = 0; x < world_size/tile_size; x++)
+            for (int y = 0; y < world_size/tile_size; y++)
             {
                 velocity[x, y] = new Vector2(0, 0);
                 boids_per_tile[x, y] = new List<Boid>();
@@ -108,10 +121,10 @@ public class WorldManager : MonoBehaviour
                 for (int dy = -1; dy <= 1; dy++)
                 {
 
-                    int x = (int)b.position.x / 10 + dx;
-                    int y = (int)b.position.y / 10 + dy;
+                    int x = (int)b.position.x / tile_size + dx;
+                    int y = (int)b.position.y / tile_size + dy;
 
-                    if (x >= 0 && x < world_size && y >= 0 && y < world_size)
+                    if (x >= 0 && x < world_size / tile_size && y >= 0 && y < world_size / tile_size)
                     {
                         boids_per_tile[x, y].Add(b);
                         velocity[x, y] += b.velocity * b.speed_weight;
@@ -119,9 +132,22 @@ public class WorldManager : MonoBehaviour
                     }
                 }
         }
-        for (int x = 0; x < world_size; x++)
-            for (int y = 0; y < world_size; y++)
+        for (int x = 0; x < world_size / tile_size; x++)
+            for (int y = 0; y < world_size / tile_size; y++)
                 if (count[x, y] > 0)
+                {
                     velocity[x, y] /= count[x, y];
+                }
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (velocity != null)
+        for (int cy = 0; cy < world_size; cy++)
+            for (int cx = 0; cx < world_size; cx++)
+            {
+                Vector2 pos = new Vector2(cx, cy);
+                Vector2 vel = GetTargetVelocity(pos);
+                Gizmos.DrawLine(V.W(pos), V.W(pos + vel));
+            }
     }
 }
