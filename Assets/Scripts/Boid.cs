@@ -54,7 +54,7 @@ public class Boid : MonoBehaviour
         }
 
         position += velocity * Time.deltaTime * speed;
-        position = worldManager.BumpWithWorld(position);
+        position = worldManager.BumpWithWorld(position, false);
         transform.position = new Vector3(position.x, 0, position.y);
         transform.rotation = Quaternion.LookRotation(new Vector3(velocity.x, 0, velocity.y));
     }
