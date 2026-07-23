@@ -7,6 +7,12 @@ public class Spotter : MonoBehaviour
     [SerializeField] private float angle;
     [SerializeField] private float length;
 
+
+    private void Start()
+    {
+        light = GetComponent<Light>();
+    }
+    private Light light;
     private void OnDrawGizmos()
     {
         Vector3 origin = transform.position;
@@ -27,6 +33,17 @@ public class Spotter : MonoBehaviour
 
 
         IsPointInCone(new Vector3(0, 0, 0));
+    }
+
+    private Transform player;
+
+    private void OnCollisionStay(Collision collision)
+    {
+        player = FindAnyObjectByType<PlayerMovement>().transform;
+    }
+    private void Update()
+    {
+        light.enabled = Vector3.Distance(player.position, transform.position) < 20;
     }
 
     public bool IsPointInCone(Vector3 worldPoint)
