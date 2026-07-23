@@ -70,7 +70,7 @@ public class WorldManager : MonoBehaviour
 
         foreach (BuildingBoundingBox bbb in bbb_objects)
         {
-            new_position = bbb.Reproject(new_position);
+            new_position = bbb.Reproject(new_position, bVel);
         }
 
         return new_position;
