@@ -5,8 +5,11 @@ public class Eatable : MonoBehaviour
 {
     [SerializeField] private GameObject censorPrefab;
 
+    public bool eaten;
+
     public void StartEat()
     {
+        eaten = true;
         StartCoroutine(Eat());
     }
 

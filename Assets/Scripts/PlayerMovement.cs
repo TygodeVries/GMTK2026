@@ -67,11 +67,46 @@ public class PlayerMovement : MonoBehaviour
         if (rb.linearVelocity.magnitude > 0.2f)
             modelTransform.LookAt(modelTransform.position + rb.linearVelocity.normalized);
 
-        if (eatAction.WasPressedThisFrame())
+        EatHeadsup();
+    }
+
+    private void EatHeadsup()
+    {
+
+
+        float closest = 10000;
+        Eatable[] eatables = FindObjectsByType<Eatable>();
+        Eatable closestEatable = null;
+        foreach (Eatable eatable in eatables)
         {
-            Eat();
+            float dis = Vector3.Distance(eatable.transform.position, transform.position);
+            if (dis < closest)
+            {
+                closest = dis;
+                closestEatable = eatable;
+            }
+        }
+
+        float angle = Vector3.Angle(-closestEatable.transform.forward, transform.position - closestEatable.transform.position);
+
+        if (closest < 2 && angle < 45 && !closestEatable.eaten)
+        {
+            eatInput.SetActive(true);
+
+            if (eatAction.WasPressedThisFrame())
+            {
+                Eat(closestEatable);
+                eatInput.SetActive(false);
+            }
+        }
+        else
+        {
+            eatInput.SetActive(false);
         }
     }
+
+    [SerializeField] private GameObject eatInput;
+
 
     private void UpdateEat()
     {
@@ -81,29 +116,10 @@ public class PlayerMovement : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2);
         modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
     }
-    private void Eat()
+    private void Eat(Eatable closestEatable)
     {
-        Debug.Log("Yum");
-        float closest = 100000;
-        Eatable[] eatables = FindObjectsByType<Eatable>();
-        Eatable closestEatable = null;
-        foreach (Eatable eatable in eatables)
-        {
-            float dis = Vector3.Distance(eatable.transform.position, transform.position);
-
-            Debug.Log(dis);
-            if (dis < closest)
-            {
-                closest = dis;
-                closestEatable = eatable;
-            }
-        }
-
-        if (closest < 2)
-        {
-            currentlyEating = closestEatable;
-            currentlyEating.StartEat();
-        }
+        currentlyEating = closestEatable;
+        currentlyEating.StartEat();
     }
 
     public Eatable currentlyEating = null;
