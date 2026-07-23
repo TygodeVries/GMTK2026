@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Coffin : MonoBehaviour
@@ -23,5 +24,6 @@ public class Coffin : MonoBehaviour
 
         Purse purse = collision.gameObject.GetComponent<Purse>();
         score += purse.Clear();
+        GetComponentInChildren<TMP_Text>().text = $"{score}/200";
     }
 }
