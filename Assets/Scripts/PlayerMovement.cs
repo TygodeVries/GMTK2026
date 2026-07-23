@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ParticleSystem smokeSystem;
 
     [SerializeField] private InputAction moveAction;
+    [SerializeField] private InputAction eatAction;
 
     private Camera camera;
     private Rigidbody rb;
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
         moveAction.Enable();
         rb = GetComponent<Rigidbody>();
         camera = Camera.main;
+        eatAction.Enable();
     }
 
 
@@ -48,6 +50,13 @@ public class PlayerMovement : MonoBehaviour
             smokeSystem.Play();
             smokeIsPlaying = true;
         }
+
+
+        if (currentlyEating != null)
+        {
+            UpdateEat();
+            return;
+        }
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
         Vector3 worldMovement = camera.transform.rotation * new Vector3(moveInput.x, moveInput.y);
         worldMovement.y = 0;
@@ -57,7 +66,44 @@ public class PlayerMovement : MonoBehaviour
 
         if (rb.linearVelocity.magnitude > 0.2f)
             modelTransform.LookAt(modelTransform.position + rb.linearVelocity.normalized);
+
+        if (eatAction.WasPressedThisFrame())
+        {
+            Eat();
+        }
     }
+
+    private void UpdateEat()
+    {
+        transform.position = Vector3.Lerp(transform.position, currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0), Time.deltaTime * 2);
+        modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
+    }
+    private void Eat()
+    {
+        Debug.Log("Yum");
+        float closest = 100000;
+        Eatable[] eatables = FindObjectsByType<Eatable>();
+        Eatable closestEatable = null;
+        foreach (Eatable eatable in eatables)
+        {
+            float dis = Vector3.Distance(eatable.transform.position, transform.position);
+
+            Debug.Log(dis);
+            if (dis < closest)
+            {
+                closest = dis;
+                closestEatable = eatable;
+            }
+        }
+
+        if (closest < 2)
+        {
+            currentlyEating = closestEatable;
+            currentlyEating.StartEat();
+        }
+    }
+
+    public Eatable currentlyEating = null;
 
     private void CheckSpotting()
     {
