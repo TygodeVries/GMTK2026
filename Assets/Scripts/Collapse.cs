@@ -2,14 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Collapse : MonoBehaviour
 {
-    [SerializeField] private int width = 20;
-    [SerializeField] private int height = 20;
+    [SerializeField] public int width = 20;
+    [SerializeField] public int height = 20;
 
     private TileType[,,] possibilities;
     private TileType[,] map;
+
+    public TileType GetTileAt(int x, int y)
+    {
+        return map[x, y];
+    }
+
     private int typeCount = 0;
     private void Start()
     {
@@ -25,54 +32,33 @@ public class Collapse : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                for (int i = 1; i < typeCount; i++)
+                for (int i = 2; i < typeCount; i++)
                 {
                     possibilities[x, y, i] = types[i];
                 }
+
+                possibilities[x, y, (int)TileType.Plaza] = TileType.None;
+                possibilities[x, y, (int)TileType.House] = TileType.None;
             }
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (map == null)
-            return;
+    [SerializeField] private UnityEvent OnComplete;
 
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < width; y++)
-            {
-                TileType type = map[x, y];
-
-                if (type == TileType.None)
-                {
-                    Gizmos.color = Color.red;
-                }
-
-                if (type == TileType.Land)
-                {
-                    Gizmos.color = Color.green;
-                }
-
-                if (type == TileType.Water)
-                {
-                    Gizmos.color = Color.blue;
-                }
-
-                if (type == TileType.Sand)
-                {
-                    Gizmos.color = Color.yellow;
-                }
-
-                Gizmos.DrawCube(new Vector3(x, 0, y), new Vector3(1, 1, 1));
-            }
-        }
-    }
-
+    private bool completed = false;
     private void Update()
     {
+        if (completed) return;
+
         for (int i = 0; i < 100; i++)
-            SolveStep();
+        {
+            if (SolveStep())
+            {
+                OnComplete.Invoke();
+                completed = true;
+                return;
+            }
+        }
     }
 
     public bool SolveStep()
@@ -99,45 +85,90 @@ public class Collapse : MonoBehaviour
 
         possibilities[x, y, (int)type] = type;
 
-        UpdateNear(x + 1, y, type);
-        UpdateNear(x - 1, y, type);
-        UpdateNear(x, y + 1, type);
-        UpdateNear(x, y - 1, type);
-    }
-
-    private void UpdateNear(int x, int y, TileType placed)
-    {
-        if (x < 0 || x >= width || y < 0 || y >= height)
-            return;
-
-        if (map[x, y] != TileType.None)
-            return;
-
-        for (int i = 1; i < typeCount; i++)
+        if (type == TileType.XStreet)
         {
-            TileType candidate = possibilities[x, y, i];
+            NoRoads(x, y + 1);
+            NoRoads(x, y - 1);
 
-            if (candidate == TileType.None)
-                continue;
+            RoadEnd(x + 1, y, type);
+            RoadEnd(x - 1, y, type);
+        }
 
-            if (!CanTouch(placed, candidate))
-                possibilities[x, y, i] = TileType.None;
+        if (type == TileType.YStreet)
+        {
+            NoRoads(x + 1, y);
+            NoRoads(x - 1, y);
+
+            RoadEnd(x, y + 1, type);
+            RoadEnd(x, y - 1, type);
+        }
+
+        if (type == TileType.Plaza)
+        {
+            ForbiddenPlaza(x + 1, y);
+            ForbiddenPlaza(x - 1, y);
+            ForbiddenPlaza(x, y + 1);
+            ForbiddenPlaza(x, y - 1);
         }
     }
 
-    private bool CanTouch(TileType a, TileType b)
+    public void ForbiddenPlaza(int x, int y)
     {
-        if (a == TileType.Water)
-            return b == TileType.Water || b == TileType.Sand;
+        if (x == -1 || x == width)
+            return;
 
-        if (a == TileType.Sand)
-            return b == TileType.Sand || b == TileType.Water || b == TileType.Land;
+        if (y == -1 || y == height)
+            return;
 
-        if (a == TileType.Land)
-            return b == TileType.Land || b == TileType.Sand;
-
-        return true;
+        possibilities[x, y, (int)TileType.Plaza] = TileType.Forbidden;
     }
+
+    public void NoRoads(int x, int y)
+    {
+        if (x == -1 || x == width)
+            return;
+
+        if (y == -1 || y == height)
+            return;
+
+        possibilities[x, y, (int)TileType.YStreet] = TileType.None;
+        possibilities[x, y, (int)TileType.XStreet] = TileType.None;
+
+        possibilities[x, y, (int)TileType.House] = TileType.House;
+        possibilities[x, y, (int)TileType.House] = TileType.House;
+
+        ForbiddenPlaza(x, y);
+        ForbiddenPlaza(x, y);
+    }
+
+    public void RoadEnd(int x, int y, TileType me)
+    {
+        if (x == -1 || x == width)
+            return;
+
+        if (y == -1 || y == height)
+            return;
+
+        // Allow
+
+        if (possibilities[x, y, (int)TileType.Plaza] != TileType.Forbidden)
+            possibilities[x, y, (int)TileType.Plaza] = TileType.Plaza;
+
+        // Deny
+        if (me == TileType.XStreet)
+        {
+            possibilities[x, y, (int)TileType.YStreet] = TileType.None;
+        }
+
+        if (me == TileType.YStreet)
+        {
+            possibilities[x, y, (int)TileType.XStreet] = TileType.None;
+        }
+
+        possibilities[x, y, (int)TileType.Grass] = TileType.None;
+    }
+
+
 
 
     private (int x, int y)? FindWorstTile()
@@ -200,7 +231,12 @@ public class Collapse : MonoBehaviour
 public enum TileType : byte
 {
     None = 0x00,
-    Sand = 0x01,
-    Water = 0x02,
-    Land = 0x03
+    Forbidden = 0x10,
+
+    Grass = 0x01,
+    YStreet = 0x02,
+    XStreet = 0x03,
+    Plaza = 0x04,
+    House = 0x05
+
 }
