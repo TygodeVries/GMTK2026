@@ -11,6 +11,19 @@ public class ScreamSpotter : Spotter
     }
     public bool isScreaming = false;
     float screamTime = 0;
+
+    public void StartScream()
+    {
+        isScreaming = true;
+        screamTime = 10;
+        screamObject.SetActive(isScreaming);
+    }
+    public void EndScream()
+    {
+        isScreaming = false;
+        screamTime = 0;
+        screamObject.SetActive(isScreaming);
+    }
     // Update is called once per frame
     void Update()
     {

@@ -15,34 +15,48 @@ public class Boid : MonoBehaviour
     public float minimize_distance = 0.25f;
     public float speed = .25f;
     public float speed_weight = 1f;
+    public bool is_cop = false;
     // Update is called once per frame
     void LateUpdate()
     {
         WorldManager worldManager = Object.FindAnyObjectByType<WorldManager>();
         
         Vector2 target_velocity = worldManager.GetTargetVelocity(position);
+        if (is_cop)
+        {
+            target_velocity = -target_velocity;
+        }
         Vector2 target_position = position + target_velocity / 10.0f;
-        Vector2 player_position = V.W(FindAnyObjectByType<PlayerMovement>().transform.position);
+        Vector3 player_position_3d = FindAnyObjectByType<PlayerMovement>().transform.position;
+        Vector2 player_position = V.W(player_position_3d);
 
         {
             if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
             {
                 target_position += (target_position - player_position).normalized;
             }
-            if (GetComponent<LightSpotter>() is LightSpotter lightSpotter)
+        }
+        if (is_cop)
+        {
+            if (GetComponent<LightSpotter>() is LightSpotter lightSpotter && lightSpotter.IsPointInCone(player_position_3d))
             {
-                List<Boid> near = worldManager.getNearBoids(position);
-                bool noticeScreaming = false;
-                foreach (Boid b in near)
+                target_position = player_position;
+            }
+            else
+            {
+
+                Vector2 target = new Vector2(0, 0);
+                int count = 0;
+                foreach (Boid b in FindObjectsByType<Boid>())
                 {
-                    if (b.GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter2 && screamSpotter2.isScreaming)
+                    if (b.GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
                     {
-                        noticeScreaming = true;
-                        break;
+                        target += b.position;
+                        count++;
                     }
                 }
-                if (noticeScreaming)
-                    target_position = position + (player_position - position).normalized;
+                target /= count;
+                target_position = target;
             }
         }
         bool iter = false;
