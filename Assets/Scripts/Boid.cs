@@ -22,6 +22,15 @@ public class Boid : MonoBehaviour
         
         Vector2 target_velocity = worldManager.GetTargetVelocity(position);
         Vector2 target_position = position + target_velocity / 10.0f;
+        {
+            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
+            {
+                Vector3 player_position = FindAnyObjectByType<PlayerMovement>().transform.position;
+                Vector2 p2d = V.W(player_position);
+                target_position += (target_position - p2d).normalized;
+
+            }
+        }
         bool iter = false;
         int iter_count = 5;
         do
@@ -52,7 +61,12 @@ public class Boid : MonoBehaviour
         {
             velocity = Vector2.zero;
         }
-
+        {
+            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
+            {
+                velocity *= 2;
+            }
+        }
         position += velocity * Time.deltaTime * speed;
         position = worldManager.BumpWithWorld(position, false);
         transform.position = new Vector3(position.x, 0, position.y);
