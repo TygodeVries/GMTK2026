@@ -9,7 +9,8 @@ public class ScreamSpotter : Spotter
     {
         
     }
-
+    public bool isScreaming = false;
+    float screamTime = 0;
     // Update is called once per frame
     void Update()
     {
@@ -19,10 +20,14 @@ public class ScreamSpotter : Spotter
         {
             Debug.Log("AAAAAHHHHHH!");
             screamObject.SetActive(true);
+            isScreaming = true;
+            screamTime = 10;
         }
         else
         {
-            screamObject.SetActive(false);
+            screamTime = Mathf.Max(0, screamTime - Time.deltaTime);
+            isScreaming = screamTime > 0;
+            screamObject.SetActive(isScreaming);
         }
     }
 
