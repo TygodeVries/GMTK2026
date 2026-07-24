@@ -110,16 +110,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateEat()
     {
-        Vector3 newPos = currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0);
-        newPos.y = transform.position.y;
-
-        transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2);
-        modelTransform.LookAt(currentlyEating.transform.position - new Vector3(0, 1, 0));
+        // Nothing really happens here, we're blurred
     }
     private void Eat(Eatable closestEatable)
     {
+        ScreamSpotter.SetEnabled(true);
         currentlyEating = closestEatable;
         currentlyEating.StartEat();
+        Vector3 newPos = currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0);
+        newPos.y = transform.position.y;
+        transform.position = newPos;
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        modelTransform.LookAt(currentlyEating.transform.position);
     }
 
     public Eatable currentlyEating = null;
@@ -127,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
     private void CheckSpotting()
     {
         isBeingSpotted = false;
-        foreach (Spotter spotter in Spotter.Spotters)
+        foreach (Spotter spotter in LightSpotter.Spotters)
         {
             if (spotter.IsPointInCone(transform.position))
             {

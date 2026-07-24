@@ -16,12 +16,14 @@ public class Eatable : MonoBehaviour
     private IEnumerator Eat()
     {
         // Start eating animation
-        yield return new WaitForSeconds(1);
         GameObject censorObject = GameObject.Instantiate(censorPrefab);
 
         censorObject.transform.position = transform.position;
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
+
+        // Spawn some gold
+
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
 
         if (transform.GetChild(0).GetComponent<Spotter>() != null)
@@ -30,5 +32,8 @@ public class Eatable : MonoBehaviour
             transform.GetChild(0).gameObject
             );
         }
+
+        Destroy(censorObject, 10);
+        Destroy(this.gameObject, 9);
     }
 }

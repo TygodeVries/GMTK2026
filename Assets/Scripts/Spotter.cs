@@ -3,16 +3,10 @@ using UnityEngine;
 public class Spotter : MonoBehaviour
 {
 
-    public static List<Spotter> Spotters = new List<Spotter>();
     [SerializeField] private float angle;
     [SerializeField] private float length;
 
 
-    private void Start()
-    {
-        light = GetComponent<Light>();
-    }
-    private Light light;
     private void OnDrawGizmos()
     {
         Vector3 origin = transform.position;
@@ -35,18 +29,7 @@ public class Spotter : MonoBehaviour
         IsPointInCone(new Vector3(0, 0, 0));
     }
 
-    private Transform player;
-    private int frame = 0;
-    private void Update()
-    {
-        frame++;
-        // Every so often
-        if (frame % 10 == 4)
-        {
-            // Disable lights far away
-            light.enabled = Vector3.Distance(player.position, transform.position) < 40;
-        }
-    }
+    protected Transform player;
 
     public bool IsPointInCone(Vector3 worldPoint)
     {
@@ -63,14 +46,5 @@ public class Spotter : MonoBehaviour
         return pointAngle <= angle * 0.5f;
     }
 
-    private void OnEnable()
-    {
-        Spotters.Add(this);
-        player = FindAnyObjectByType<PlayerMovement>().transform;
-    }
-
-    private void OnDisable()
-    {
-        Spotters.Remove(this);
-    }
 }
+
