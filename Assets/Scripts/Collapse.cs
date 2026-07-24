@@ -41,6 +41,9 @@ public class Collapse : MonoBehaviour
                 possibilities[x, y, (int)TileType.House] = TileType.None;
             }
         }
+
+        // No house at the player spawn please!
+        possibilities[width / 2, height / 2, (int)TileType.House] = TileType.None;
     }
 
     [SerializeField] private UnityEvent OnComplete;
@@ -54,8 +57,8 @@ public class Collapse : MonoBehaviour
         {
             if (SolveStep())
             {
-                OnComplete.Invoke();
                 completed = true;
+                OnComplete?.Invoke();
                 return;
             }
         }
