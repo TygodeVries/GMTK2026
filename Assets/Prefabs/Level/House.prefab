@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingBoundingBox
   Size: {x: 5, y: 5}
-  minimum_distance: 0.1
+  minimum_distance: 1
 --- !u!65 &3547530672669654376
 BoxCollider:
   m_ObjectHideFlags: 0
