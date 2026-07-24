@@ -10033,7 +10033,7 @@ MonoBehaviour:
     m_Flags: 0
   eatInput: {fileID: 0}
   currentlyEating: {fileID: 0}
-  maxSpotTime: 1.5
+  maxSpotTime: 1
 --- !u!114 &3114544452679900283
 MonoBehaviour:
   m_ObjectHideFlags: 0
