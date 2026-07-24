@@ -208,11 +208,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1754565723390667944, guid: dba93d385fe921d4f9498896832ac02d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4465880624597392055, guid: dba93d385fe921d4f9498896832ac02d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1483947641447741609}
   m_SourcePrefab: {fileID: 100100000, guid: dba93d385fe921d4f9498896832ac02d, type: 3}
+--- !u!1 &570396874208298705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4465880624597392055, guid: dba93d385fe921d4f9498896832ac02d, type: 3}
+  m_PrefabInstance: {fileID: 4184840396351773798}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1483947641447741609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570396874208298705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801d5e349f9f032418c29689825139ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightSpotter
+  angle: 45.7
+  length: 9.91
 --- !u!4 &7485646385388084442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6769422135640113340, guid: dba93d385fe921d4f9498896832ac02d, type: 3}
