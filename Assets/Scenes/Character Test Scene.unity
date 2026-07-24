@@ -5624,8 +5624,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e7eddeb9a2351409d1703c464f03e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  width: 10
-  height: 10
+  width: 20
+  height: 20
+  OnComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &493442229
 Transform:
   m_ObjectHideFlags: 0
@@ -8121,6 +8124,10 @@ PrefabInstance:
       propertyPath: eatInput
       value: 
       objectReference: {fileID: 630924373}
+    - target: {fileID: 4985866043004514597, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6654069958042725622, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.9

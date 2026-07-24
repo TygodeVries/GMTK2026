@@ -22,13 +22,27 @@ public class Boid : MonoBehaviour
         
         Vector2 target_velocity = worldManager.GetTargetVelocity(position);
         Vector2 target_position = position + target_velocity / 10.0f;
+        Vector2 player_position = V.W(FindAnyObjectByType<PlayerMovement>().transform.position);
+
         {
             if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
             {
-                Vector3 player_position = FindAnyObjectByType<PlayerMovement>().transform.position;
-                Vector2 p2d = V.W(player_position);
-                target_position += (target_position - p2d).normalized;
-
+                target_position += (target_position - player_position).normalized;
+            }
+            if (GetComponent<LightSpotter>() is LightSpotter lightSpotter)
+            {
+                List<Boid> near = worldManager.getNearBoids(position);
+                bool noticeScreaming = false;
+                foreach (Boid b in near)
+                {
+                    if (b.GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter2 && screamSpotter2.isScreaming)
+                    {
+                        noticeScreaming = true;
+                        break;
+                    }
+                }
+                if (noticeScreaming)
+                    target_position = position + (player_position - position).normalized;
             }
         }
         bool iter = false;
