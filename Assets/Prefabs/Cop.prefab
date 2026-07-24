@@ -142,6 +142,7 @@ MonoBehaviour:
   minimize_distance: 1.5
   speed: 3.5
   speed_weight: -10
+  is_cop: 1
 --- !u!114 &2768510884940061481
 MonoBehaviour:
   m_ObjectHideFlags: 0

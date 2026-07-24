@@ -17,11 +17,22 @@ public class Eatable : MonoBehaviour
     {
         // Start eating animation
         GameObject censorObject = GameObject.Instantiate(censorPrefab);
-
+        {
+            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter)
+            {
+                screamSpotter.StartScream();
+            }
+        }
         censorObject.transform.position = transform.position;
 
         yield return new WaitForSeconds(4);
-
+        {
+            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter)
+            {
+                screamSpotter.EndScream();
+                screamSpotter.enabled = false;
+            }
+        }
         // Spawn some gold
 
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
