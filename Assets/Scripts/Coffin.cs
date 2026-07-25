@@ -7,9 +7,23 @@ public class Coffin : MonoBehaviour
     [SerializeField] private Animator animator;
     private Purse player;
 
+    private int maxScore = 0;
     private void Start()
     {
         player = FindAnyObjectByType<Purse>();
+    }
+
+    // Called by external script
+    public void OnLevelReady()
+    {
+        Coin[] coins = FindObjectsByType<Coin>();
+        foreach (Coin coin in coins)
+        {
+            maxScore += coin.coinCount;
+        }
+        UpdateText();
+
+
     }
 
     private void Update()
@@ -24,7 +38,12 @@ public class Coffin : MonoBehaviour
 
         Purse purse = collision.gameObject.GetComponent<Purse>();
         score += purse.Clear();
-        GetComponentInChildren<TMP_Text>().text = $"{score}/200";
+        UpdateText();
         ScreamSpotter.SetEnabled(false);
+    }
+
+    private void UpdateText()
+    {
+        GetComponentInChildren<TMP_Text>().text = $"{score}/{maxScore}";
     }
 }

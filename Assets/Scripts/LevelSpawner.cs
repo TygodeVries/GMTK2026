@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelSpawner : MonoBehaviour
 {
@@ -37,6 +38,18 @@ public class LevelSpawner : MonoBehaviour
                 o.transform.position = new Vector3((x * 5) + 2.5f, 0, (y * 5) + 2.5f);
             }
         }
+
+        GameObject[] gms = SceneManager.GetActiveScene().GetRootGameObjects();
+
+        foreach (GameObject game in gms)
+        {
+            game.BroadcastMessage(nameof(OnLevelReady), SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+    public void OnLevelReady()
+    {
+
     }
 }
 
