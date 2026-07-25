@@ -51,10 +51,10 @@ public class Collapse : MonoBehaviour
                 waveform[x, y] = 0xFF;
             }
         }
-        waveform[width / 2, height / 2] = 1 << 6;
-        waveform[width / 2+1, height / 2] = 1 << 6;
-        waveform[width / 2, height / 2-1] = 1 << 6;
-        waveform[width / 2+1, height / 2-1] = 1 << 6;
+        waveform[width / 2, height / 2] = 0x7F;
+        waveform[width / 2+1, height / 2] = 0x7F;
+        waveform[width / 2, height / 2-1] = 0x7F;
+        waveform[width / 2+1, height / 2-1] = 0x7F;
         // No house at the player spawn please!
 
         // Maybe add some random stuff as seed
