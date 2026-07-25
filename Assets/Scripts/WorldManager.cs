@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class V
 {
@@ -19,42 +20,54 @@ public class WorldManager : MonoBehaviour
     public Object civilian_man;
     public Object cop;
 
-    List<(Vector2, Vector2)> debug_lines = new List<(Vector2, Vector2)>();
+    private List<(Vector2, Vector2)> debug_lines = new List<(Vector2, Vector2)>();
 
-    Vector2[,] velocity;
-    List<Boid>[,] boids_per_tile;
-    void Start()
+    private Vector2[,] velocity;
+    private List<Boid>[,] boids_per_tile;
+    private void Start()
     {
-        velocity = new Vector2[world_size/tile_size, world_size / tile_size];
+        velocity = new Vector2[world_size / tile_size, world_size / tile_size];
         boids_per_tile = new List<Boid>[world_size / tile_size, world_size / tile_size];
 
         for (int cx = 0; cx < 25; cx++)
         {
             GameObject.Instantiate(civilian_man, new Vector3(Random.Range(0, world_size), 0, Random.Range(0, world_size)), Quaternion.identity);
-            GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size),0, Random.Range(0, world_size)), Quaternion.identity);
+            GameObject.Instantiate(civilian_woman, new Vector3(Random.Range(0, world_size), 0, Random.Range(0, world_size)), Quaternion.identity);
         }
         for (int cx = 0; cx < 10; cx++)
-            GameObject.Instantiate(cop, new Vector3(Random.Range(0, world_size), 0 , Random.Range(0, world_size)), Quaternion.identity);
+            GameObject.Instantiate(cop, new Vector3(Random.Range(0, world_size), 0, Random.Range(0, world_size)), Quaternion.identity);
+
+        OnDone();
     }
+
+
+    public void OnDone()
+    {
+        foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            go.BroadcastMessage("OnLevelReady", SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
     public Vector2 GetTargetVelocity(Vector2 position)
     {
-        int x = (int)position.x/tile_size;
-        int y = (int)position.y/tile_size;
+        int x = (int)position.x / tile_size;
+        int y = (int)position.y / tile_size;
         if (x >= 0 && x < world_size / tile_size && y >= 0 && y < world_size / tile_size)
         {
-            float fx = position.x/ tile_size - x;
-            float fy = position.y/ tile_size - y;
-            int xo = Mathf.Min(x + 1, world_size/tile_size - 1);
-            int yo = Mathf.Min(y + 1, world_size/tile_size - 1);
+            float fx = (position.x / tile_size) - x;
+            float fy = (position.y / tile_size) - y;
+            int xo = Mathf.Min(x + 1, (world_size / tile_size) - 1);
+            int yo = Mathf.Min(y + 1, (world_size / tile_size) - 1);
             float ofx = 1f - fx;
             float ofy = 1f - fy;
-            
 
-            return 
-                velocity[x, y] * ofx * ofy +
-                velocity[x, yo] * ofx * fy +
-                velocity[xo, y] * fx * ofy +
-                velocity[xo, yo] * fx * fy;
+
+            return
+                (velocity[x, y] * ofx * ofy) +
+                (velocity[x, yo] * ofx * fy) +
+                (velocity[xo, y] * fx * ofy) +
+                (velocity[xo, yo] * fx * fy);
         }
         else
             return new Vector2(0, 0);
@@ -69,15 +82,15 @@ public class WorldManager : MonoBehaviour
             new_position.x = offset;
         if (position.x > world_size - offset)
             new_position.x = world_size - offset;
-        if (position.y < offset) 
-              new_position.y = offset;
+        if (position.y < offset)
+            new_position.y = offset;
         if (position.y > world_size - offset)
-                new_position.y = world_size - offset;
+            new_position.y = world_size - offset;
 
         // Get all BuildingBoundingBox objects
         // transform the current position to the BBB space
         // Project out of the BBB, reproject to world space
-       BuildingBoundingBox[] bbb_objects = Object.FindObjectsByType<BuildingBoundingBox>();
+        BuildingBoundingBox[] bbb_objects = Object.FindObjectsByType<BuildingBoundingBox>();
 
         foreach (BuildingBoundingBox bbb in bbb_objects)
         {
@@ -103,11 +116,11 @@ public class WorldManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         debug_lines.Clear();
-        for (int x = 0; x < world_size/tile_size; x++)
-            for (int y = 0; y < world_size/tile_size; y++)
+        for (int x = 0; x < world_size / tile_size; x++)
+            for (int y = 0; y < world_size / tile_size; y++)
             {
                 velocity[x, y] = new Vector2(0, 0);
                 boids_per_tile[x, y] = new List<Boid>();
@@ -121,8 +134,8 @@ public class WorldManager : MonoBehaviour
                 for (int dy = -1; dy <= 1; dy++)
                 {
 
-                    int x = (int)b.position.x / tile_size + dx;
-                    int y = (int)b.position.y / tile_size + dy;
+                    int x = ((int)b.position.x / tile_size) + dx;
+                    int y = ((int)b.position.y / tile_size) + dy;
 
                     if (x >= 0 && x < world_size / tile_size && y >= 0 && y < world_size / tile_size)
                     {
@@ -142,12 +155,12 @@ public class WorldManager : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (velocity != null)
-        for (int cy = 0; cy < world_size; cy++)
-            for (int cx = 0; cx < world_size; cx++)
-            {
-                Vector2 pos = new Vector2(cx, cy);
-                Vector2 vel = GetTargetVelocity(pos);
-                Gizmos.DrawLine(V.W(pos), V.W(pos + vel));
-            }
+            for (int cy = 0; cy < world_size; cy++)
+                for (int cx = 0; cx < world_size; cx++)
+                {
+                    Vector2 pos = new Vector2(cx, cy);
+                    Vector2 vel = GetTargetVelocity(pos);
+                    Gizmos.DrawLine(V.W(pos), V.W(pos + vel));
+                }
     }
 }
