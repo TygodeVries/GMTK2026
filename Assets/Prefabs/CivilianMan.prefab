@@ -257,6 +257,7 @@ MonoBehaviour:
   minimize_distance: 2.5
   speed: 2.5
   speed_weight: 1
+  is_cop: 0
 --- !u!114 &9049210771990902649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +299,7 @@ MonoBehaviour:
   angle: 45
   length: 9
   screamObject: {fileID: 1391727352967613596}
+  isScreaming: 0
 --- !u!1 &8513937501196622535
 GameObject:
   m_ObjectHideFlags: 0
