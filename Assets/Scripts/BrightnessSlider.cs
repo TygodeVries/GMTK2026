@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -36,6 +37,13 @@ public class BrightnessSlider : MonoBehaviour
     public void NextScene()
     {
         PlayerPrefs.Save();
+        FindAnyObjectByType<Animator>().SetTrigger("Exit");
+        StartCoroutine(LoadNextSceneLater());
+    }
+
+    private IEnumerator LoadNextSceneLater()
+    {
+        yield return new WaitForSeconds(2);
         SceneManager.LoadScene(1);
     }
 }
