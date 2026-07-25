@@ -4,17 +4,35 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+using System.Numerics;
+using Unity.VisualScripting.Antlr3.Runtime;
+
 public class Collapse : MonoBehaviour
 {
     [SerializeField] public int width = 20;
     [SerializeField] public int height = 20;
+    private ulong[,] waveform;
+    private ulong[,] rules = new ulong[8,4]{
+        {0b01110010,0b10100110,0b01001110,0b10011010 },
+        {0b10001101,0b01011001,0b10110001,0b01100101 }, 
+        {0b10001101,0b10100110,0b01001110,0b01100101 }, 
+        {0b10001101,0b01011001,0b01001110,0b10011010 }, 
+        {0b01110010,0b01011001,0b10110001,0b10011010 }, 
+        {0b01110010,0b10100110,0b10110001,0b01100101 },
+        {0b10001101,0b10100110,0b10110001,0b10011010 },
+        {0b01110010,0b01011001,0b01001110,0b01100101 }
+    };
+    private int[] _dx = new int[4] { 0, 1, 0, -1 };
+    private int[] _dy = new int[4] { -1, 0, 1, 0 };
 
-    private TileType[,,] possibilities;
-    private TileType[,] map;
 
     public TileType GetTileAt(int x, int y)
     {
-        return map[x, y];
+        ulong val = waveform[x, y];
+        for (int cx = 7; cx > 0; cx--)
+            if ((val & (1UL << cx)) != 0)
+                return (TileType)cx;
+        return TileType.Home;
     }
 
     private int typeCount = 0;
@@ -23,27 +41,23 @@ public class Collapse : MonoBehaviour
         typeCount = Enum.GetValues(typeof(TileType)).Length;
         TileType[] types = (TileType[])Enum.GetValues(typeof(TileType));
 
-        map = new TileType[width, height];
-        possibilities = new TileType[width, height, typeCount];
-
-
+        
+        waveform = new ulong[width, height];
         // At the beginning, everything is possible
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                for (int i = 2; i < typeCount; i++)
-                {
-                    possibilities[x, y, i] = types[i];
-                }
-
-                possibilities[x, y, (int)TileType.Plaza] = TileType.None;
-                possibilities[x, y, (int)TileType.House] = TileType.None;
+                waveform[x, y] = 0xFF;
             }
         }
-
+        waveform[width / 2, height / 2] = 0x7F;
+        waveform[width / 2+1, height / 2] = 0x7F;
+        waveform[width / 2, height / 2-1] = 0x7F;
+        waveform[width / 2+1, height / 2-1] = 0x7F;
         // No house at the player spawn please!
-        possibilities[width / 2, height / 2, (int)TileType.House] = TileType.None;
+
+        // Maybe add some random stuff as seed
     }
 
     [SerializeField] private UnityEvent OnComplete;
@@ -81,109 +95,53 @@ public class Collapse : MonoBehaviour
 
     public void MakeTileAt(int x, int y, TileType type)
     {
-        map[x, y] = type;
+        waveform[x,y] = 1UL << (int)type;
 
-        for (int i = 0; i < typeCount; i++)
-            possibilities[x, y, i] = TileType.None;
-
-        possibilities[x, y, (int)type] = type;
-
-        if (type == TileType.XStreet)
+        for (int dir = 0; dir < 4; dir++)
         {
-            NoRoads(x, y + 1);
-            NoRoads(x, y - 1);
-
-            RoadEnd(x + 1, y, type);
-            RoadEnd(x - 1, y, type);
-        }
-
-        if (type == TileType.YStreet)
-        {
-            NoRoads(x + 1, y);
-            NoRoads(x - 1, y);
-
-            RoadEnd(x, y + 1, type);
-            RoadEnd(x, y - 1, type);
-        }
-
-        if (type == TileType.Plaza)
-        {
-            ForbiddenPlaza(x + 1, y);
-            ForbiddenPlaza(x - 1, y);
-            ForbiddenPlaza(x, y + 1);
-            ForbiddenPlaza(x, y - 1);
+            int nx = x + _dx[dir];
+            int ny = y + _dy[dir];
+            if (nx < 0 || nx >= width || ny < 0 || ny >= height)
+                continue;
+            ulong allowed = rules[(int)type, dir];
+            waveform[nx, ny] &= ~allowed;
         }
     }
-
-    public void ForbiddenPlaza(int x, int y)
-    {
-        if (x == -1 || x == width)
-            return;
-
-        if (y == -1 || y == height)
-            return;
-
-        possibilities[x, y, (int)TileType.Plaza] = TileType.Forbidden;
-    }
-
-    public void NoRoads(int x, int y)
-    {
-        if (x == -1 || x == width)
-            return;
-
-        if (y == -1 || y == height)
-            return;
-
-        possibilities[x, y, (int)TileType.YStreet] = TileType.None;
-        possibilities[x, y, (int)TileType.XStreet] = TileType.None;
-
-        possibilities[x, y, (int)TileType.House] = TileType.House;
-        possibilities[x, y, (int)TileType.House] = TileType.House;
-
-        ForbiddenPlaza(x, y);
-        ForbiddenPlaza(x, y);
-    }
-
-    public void RoadEnd(int x, int y, TileType me)
-    {
-        if (x == -1 || x == width)
-            return;
-
-        if (y == -1 || y == height)
-            return;
-
-        // Allow
-
-        if (possibilities[x, y, (int)TileType.Plaza] != TileType.Forbidden)
-            possibilities[x, y, (int)TileType.Plaza] = TileType.Plaza;
-
-        // Deny
-        if (me == TileType.XStreet)
-        {
-            possibilities[x, y, (int)TileType.YStreet] = TileType.None;
-        }
-
-        if (me == TileType.YStreet)
-        {
-            possibilities[x, y, (int)TileType.XStreet] = TileType.None;
-        }
-
-        possibilities[x, y, (int)TileType.Grass] = TileType.None;
-    }
-
 
 
 
     private (int x, int y)? FindWorstTile()
     {
+        restart:
         List<(int x, int y, int count)> options = new List<(int, int, int)>();
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (map[x, y] == TileType.None)
-                    options.Add((x, y, GetPossibilityCount(x, y)));
+                int count = GetPossibilityCount(x, y);
+                if (count == 0)
+                {
+                    for (int cx = -5; cx <= 5; cx ++)
+                        for (int cy = -5; cy <= 5; cy ++)
+                        {
+                            int nx = x + cx;
+                            int ny = y + cy;
+                            if (nx < 0 || nx >= width || ny < 0 || ny >= height)
+                                continue;
+                            waveform[nx, ny] = 0xFF;
+                        }
+
+                    waveform[width / 2, height / 2] = 0x7F;
+                    waveform[width / 2, height / 2 - 1] = 0x7F;
+                    waveform[width / 2 + 1, height / 2] = 0x7F;
+                    waveform[width / 2 + 1, height / 2 - 1] = 0x7F;
+
+                    Debug.Log("Waveform collapse collision");
+                    goto restart;
+                }
+                if (count > 1)
+                    options.Add((x, y, count));
             }
         }
 
@@ -203,16 +161,12 @@ public class Collapse : MonoBehaviour
 
     private int GetPossibilityCount(int x, int y)
     {
-        int amount = 0;
-
-        for (int i = 0; i < typeCount; i++)
-        {
-            if (possibilities[x, y, i] != TileType.None)
-            {
-                amount++;
-            }
-        }
-        return amount;
+        ulong wave = waveform[x, y];
+        int count = 0;
+        for (int cx = 0; cx < 64; cx++)
+            if ((wave & (1UL << cx)) != 0)
+                count++;
+        return count;
     }
 
     private TileType[] GetPossibilitiesAt(int x, int y)
@@ -221,10 +175,8 @@ public class Collapse : MonoBehaviour
 
         for (int i = 0; i < typeCount; i++)
         {
-            if (possibilities[x, y, i] != TileType.None)
-            {
-                types.Add(possibilities[x, y, i]);
-            }
+            if ((waveform[x, y] & (1UL << i)) != 0)
+                types.Add((TileType)i);
         }
 
         return types.ToArray();
@@ -233,13 +185,12 @@ public class Collapse : MonoBehaviour
 
 public enum TileType : byte
 {
-    None = 0x00,
-    Forbidden = 0x10,
-
-    Grass = 0x01,
-    YStreet = 0x02,
-    XStreet = 0x03,
-    Plaza = 0x04,
-    House = 0x05
-
+    Street13 = 0,
+    Street02,
+    Street01,
+    Street03,
+    Street23,
+    Street12,
+    Plaza,
+    Home
 }
