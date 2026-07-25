@@ -257,7 +257,7 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   minimize_distance: 1.5
   speed: 3.5
-  speed_weight: -10
+  speed_weight: -2
   is_cop: 1
 --- !u!114 &2768510884940061481
 MonoBehaviour:

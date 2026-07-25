@@ -14,7 +14,7 @@ public class WorldManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int world_size = 100;
-    public int tile_size = 10;
+    public int tile_size = 20;
 
     public Object civilian_woman;
     public Object civilian_man;
@@ -70,7 +70,7 @@ public class WorldManager : MonoBehaviour
                 (velocity[xo, yo] * fx * fy);
         }
         else
-            return new Vector2(0, 0);
+            return new Vector2(0, 0); // Just go with the flow
     }
     public Vector2 BumpWithWorld(Vector2 position, bool bVel = true)
     {
@@ -78,6 +78,8 @@ public class WorldManager : MonoBehaviour
         if (bVel)
             offset += 0.1f;
         Vector2 new_position = position;
+
+        // Keep arms and legs inside the world at all times, please
         if (position.x < offset)
             new_position.x = offset;
         if (position.x > world_size - offset)
