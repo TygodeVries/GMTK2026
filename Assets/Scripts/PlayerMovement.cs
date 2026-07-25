@@ -114,7 +114,6 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Eat(Eatable closestEatable)
     {
-        ScreamSpotter.SetEnabled(true);
         currentlyEating = closestEatable;
         currentlyEating.StartEat();
         Vector3 newPos = currentlyEating.transform.position - currentlyEating.transform.forward + new Vector3(0, -1, 0);

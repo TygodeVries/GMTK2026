@@ -1,14 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assemblies;
 
 public class Boid : MonoBehaviour
 {
+    private Human human;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
+        human = GetComponent<Human>();
         velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized;
-        position = new Vector2(transform.position.x, transform.position.z ); // Needs to get worldsize
+        position = new Vector2(transform.position.x, transform.position.z); // Needs to get worldsize
     }
     public Vector2 velocity;
     public Vector2 position;
@@ -17,48 +18,13 @@ public class Boid : MonoBehaviour
     public float speed_weight = 1f;
     public bool is_cop = false;
     // Update is called once per frame
-    void LateUpdate()
+    private void LateUpdate()
     {
         WorldManager worldManager = Object.FindAnyObjectByType<WorldManager>();
-        
-        Vector2 target_velocity = worldManager.GetTargetVelocity(position);
-        if (is_cop)
-        {
-            target_velocity = -target_velocity;
-        }
-        Vector2 target_position = position + target_velocity / 10.0f;
-        Vector3 player_position_3d = FindAnyObjectByType<PlayerMovement>().transform.position;
-        Vector2 player_position = V.W(player_position_3d);
 
-        {
-            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
-            {
-                target_position += (target_position - player_position).normalized;
-            }
-        }
-        if (is_cop)
-        {
-            if (GetComponent<LightSpotter>() is LightSpotter lightSpotter && lightSpotter.IsPointInCone(player_position_3d))
-            {
-                target_position = player_position;
-            }
-            else
-            {
+        Vector2 pos = new Vector2(transform.position.x, transform.position.z);
+        Vector2 target_position = pos + human.GetTargetDirection().normalized; // Small step
 
-                Vector2 target = new Vector2(0, 0);
-                int count = 0;
-                foreach (Boid b in FindObjectsByType<Boid>())
-                {
-                    if (b.GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
-                    {
-                        target += b.position;
-                        count++;
-                    }
-                }
-                target /= count;
-                target_position = target;
-            }
-        }
         bool iter = false;
         int iter_count = 5;
         do
@@ -77,24 +43,19 @@ public class Boid : MonoBehaviour
                     }
                 }
         }
-        while (iter && iter_count --> 0);
+        while (iter && iter_count-- > 0);
 
         if ((target_position - position).magnitude > 0.0001f)
         {
             Vector2 tmp_velocity = (target_position - position).normalized;
-            velocity = 0.9f * velocity + 0.1f * tmp_velocity;
+            velocity = (0.9f * velocity) + (0.1f * tmp_velocity);
             velocity = velocity.normalized;
         }
         if (GetComponent<Eatable>() is Eatable eatable && eatable.eaten)
         {
             velocity = Vector2.zero;
         }
-        {
-            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter && screamSpotter.isScreaming)
-            {
-                velocity *= 2;
-            }
-        }
+
         position += velocity * Time.deltaTime * speed;
         position = worldManager.BumpWithWorld(position, false);
         transform.position = new Vector3(position.x, 0, position.y);

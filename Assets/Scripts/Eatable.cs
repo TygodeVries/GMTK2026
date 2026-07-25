@@ -15,24 +15,13 @@ public class Eatable : MonoBehaviour
 
     private IEnumerator Eat()
     {
+        gameObject.AddComponent<Corpse>();
+
         // Start eating animation
         GameObject censorObject = GameObject.Instantiate(censorPrefab);
-        {
-            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter)
-            {
-                screamSpotter.StartScream();
-            }
-        }
         censorObject.transform.position = transform.position;
 
         yield return new WaitForSeconds(4);
-        {
-            if (GetComponent<ScreamSpotter>() is ScreamSpotter screamSpotter)
-            {
-                screamSpotter.EndScream();
-                screamSpotter.enabled = false;
-            }
-        }
         // Spawn some gold
 
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
@@ -43,8 +32,5 @@ public class Eatable : MonoBehaviour
             transform.GetChild(0).gameObject
             );
         }
-
-        Destroy(censorObject, 10);
-        Destroy(this.gameObject, 9);
     }
 }

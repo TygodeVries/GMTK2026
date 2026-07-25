@@ -10,7 +10,6 @@ public class ReturnHome : MonoBehaviour
 
     public void Return()
     {
-        ScreamSpotter.SetEnabled(false);
         StartCoroutine(Do());
     }
 

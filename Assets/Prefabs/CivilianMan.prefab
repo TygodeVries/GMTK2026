@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 4801899563202336064}
   - component: {fileID: 9049210771990902649}
   - component: {fileID: 6536675149632657386}
-  - component: {fileID: 7112003048168415086}
+  - component: {fileID: 7300907219751580190}
   m_Layer: 0
   m_Name: CivilianMan
   m_TagString: Untagged
@@ -284,22 +284,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634cb3c72fd22f64793362dd2a116ca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RandomColor
---- !u!114 &7112003048168415086
+--- !u!114 &7300907219751580190
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3836606680422010444}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7f4151e839a3ad4cb8aaf7a54e608d6, type: 3}
+  m_Script: {fileID: 11500000, guid: d31085fdd60a2394c89cafb87448bdbd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScreamSpotter
-  angle: 45
-  length: 9
-  screamObject: {fileID: 1391727352967613596}
-  isScreaming: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Human
+  angle: 0
+  length: 0
+  isPolice: 0
 --- !u!1 &8513937501196622535
 GameObject:
   m_ObjectHideFlags: 0

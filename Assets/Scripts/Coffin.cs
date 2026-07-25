@@ -39,7 +39,6 @@ public class Coffin : MonoBehaviour
         Purse purse = collision.gameObject.GetComponent<Purse>();
         score += purse.Clear();
         UpdateText();
-        ScreamSpotter.SetEnabled(false);
     }
 
     private void UpdateText()
