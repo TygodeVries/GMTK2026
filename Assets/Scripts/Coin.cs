@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    [SerializeField] private int coinCount;
+    [SerializeField] public int coinCount;
     private void OnCollisionEnter(Collision collision)
     {
         Purse purse = collision.gameObject.GetComponent<Purse>();
