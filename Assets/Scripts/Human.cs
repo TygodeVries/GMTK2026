@@ -8,6 +8,7 @@ public class Human : Spotter
     /// </summary>
     private static List<Human> activeHumans = new List<Human>();
     [SerializeField] private bool isPolice;
+    [SerializeField] private GameObject indicator;
     private void OnEnable()
     {
         activeHumans.Add(this);
@@ -34,6 +35,7 @@ public class Human : Spotter
 
     public void UpdateCivilianAI()
     {
+        indicator.SetActive(IsInPanic());
         bool canSeePlayer = IsPointInCone(player.transform.position);
         bool canSeeCorpse = CanSeeCorpse();
         bool canSeePanicPerson = CanSeePanicHuman();
@@ -73,6 +75,8 @@ public class Human : Spotter
 
     public void UpdatePoliceAI()
     {
+        indicator.SetActive(IsInvestigating());
+
         bool canSeePlayer = IsPointInCone(player.transform.position);
         bool canSeeCorpse = CanSeeCorpse();
         bool canSeePanicPerson = CanSeePanicHuman();
@@ -134,7 +138,7 @@ public class Human : Spotter
         return false;
     }
 
-    private Corpse GetNearestCorpse()
+    private Corpse? GetNearestCorpse()
     {
         float nearestDistance = 1000;
         Corpse nearestCorpse = null;
@@ -162,7 +166,7 @@ public class Human : Spotter
         return false;
     }
 
-    private Human GetNearestPanicHuman()
+    private Human? GetNearestPanicHuman()
     {
         float nearestDistance = 1000;
         Human nearestHuman = null;
@@ -245,7 +249,7 @@ public class Human : Spotter
         }
 
         // idk
-        return new Vector2(1, 0);
+        return new Vector2(0, 0);
     }
 
     private Vector2 WorldDeltaToMapDirection(Vector3 v)

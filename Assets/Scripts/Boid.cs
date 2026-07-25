@@ -22,8 +22,10 @@ public class Boid : MonoBehaviour
     {
         WorldManager worldManager = Object.FindAnyObjectByType<WorldManager>();
 
-        Vector2 pos = new Vector2(transform.position.x, transform.position.z);
-        Vector2 target_position = pos + human.GetTargetDirection().normalized; // Small step
+        Vector2 pos = position;
+        Vector2 target_position = pos + 
+            worldManager.GetTargetVelocity(pos) * (is_cop?-1:1)
+            + human.GetTargetDirection().normalized; // Small step
 
         bool iter = false;
         int iter_count = 5;
