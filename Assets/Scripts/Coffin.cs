@@ -1,5 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Coffin : MonoBehaviour
 {
@@ -35,6 +37,19 @@ public class Coffin : MonoBehaviour
         Purse purse = collision.gameObject.GetComponent<Purse>();
         score += purse.Clear();
         UpdateText();
+
+        if (score >= maxScore)
+        {
+            StartCoroutine(StartNext());
+        }
+    }
+
+    private IEnumerator StartNext()
+    {
+        FindAnyObjectByType<LoadingUI>().GetComponent<Animator>().SetTrigger("Again");
+
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(3);
     }
 
     private void UpdateText()

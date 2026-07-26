@@ -7611,6 +7611,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1056672028492049958, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
+      propertyPath: score
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1446697583083052272, guid: 98588e6f4229eb04c92f1dcbc5f1952a, type: 3}
       propertyPath: m_Name
       value: Coffin
@@ -7680,7 +7684,7 @@ PrefabInstance:
       objectReference: {fileID: 1896978131}
     - target: {fileID: 3517395534611811629, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: normalSpeed
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4985866043004514597, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_Interpolate
