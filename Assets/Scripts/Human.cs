@@ -10,8 +10,11 @@ public class Human : Spotter
     [SerializeField] private bool isPolice;
     [SerializeField] private GameObject indicator;
 
+    private Eatable eatable;
+
     private void OnEnable()
     {
+        eatable = GetComponent<Eatable>();
         activeHumans.Add(this);
     }
     private void OnDisable()
@@ -21,6 +24,12 @@ public class Human : Spotter
 
     public void Update()
     {
+        // If we are dead, we can't do things.
+        if (eatable.eaten)
+        {
+            return;
+        }
+
         panicTime -= Time.deltaTime;
         investigateTime -= Time.deltaTime;
 

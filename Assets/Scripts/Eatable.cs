@@ -29,7 +29,7 @@ public class Eatable : MonoBehaviour
 
         FindAnyObjectByType<PlayerMovement>().currentlyEating = null;
 
-        if (transform.GetChild(0).GetComponent<Spotter>() != null)
+        if (transform.GetChild(0).GetComponent<LightSpotter>() != null)
         {
             Destroy(
             transform.GetChild(0).gameObject
