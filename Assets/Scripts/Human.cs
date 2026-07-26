@@ -29,7 +29,9 @@ public class Human : Spotter
         {
             return;
         }
-
+        panicCooldown -= Time.deltaTime;
+        if (panicTime > 0)
+            panicCooldown = 10;
         panicTime -= Time.deltaTime;
         investigateTime -= Time.deltaTime;
 
@@ -79,7 +81,8 @@ public class Human : Spotter
         // Wow someone is in panic, lets run away from them!
         if (canSeePanicPerson)
         {
-            Panic(2, GetNearestPanicHuman().transform.position);
+            if (panicCooldown < 0)
+                Panic(5, GetNearestPanicHuman().transform.position);
             return;
         }
     }
@@ -227,6 +230,7 @@ public class Human : Spotter
 
 
     private float panicTime = 0;
+    private float panicCooldown = 0;
     private Vector3 panicPoint = new Vector3();
     public bool IsInPanic()
     {
