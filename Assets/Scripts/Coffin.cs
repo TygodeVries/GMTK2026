@@ -18,7 +18,7 @@ public class Coffin : MonoBehaviour
     // Called by external script
     public void OnLevelReady()
     {
-        maxScore = 10;
+        maxScore = 15;
         UpdateText();
 
 
