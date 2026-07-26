@@ -782,7 +782,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Countess Downtuss
+  m_text: Countess Downtess
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 320798a29df87734fb3debbc8e855115, type: 2}
   m_sharedMaterial: {fileID: -7612982126366527750, guid: 320798a29df87734fb3debbc8e855115, type: 2}
@@ -1153,7 +1153,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2332033023
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1471,7 +1471,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2717908991
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
