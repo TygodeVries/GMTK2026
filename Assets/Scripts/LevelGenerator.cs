@@ -18,12 +18,21 @@ public class LevelGenerator : MonoBehaviour
 
     private List<GameObject> CreateHouses(int amount)
     {
+        Coffin coffin = FindAnyObjectByType<Coffin>();
+
         List<GameObject> houses = new List<GameObject>();
         for (int i = 0; i < amount; i++)
         {
             GameObject go = GameObject.Instantiate(buildingPrefabs[Random.Range(0, buildingPrefabs.Count)]);
             go.transform.position = new Vector3(Random.Range(0f, 100f), 0, Random.Range(0f, 100f));
             go.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+            if (Vector3.Distance(go.transform.position, coffin.transform.position) < 10)
+            {
+                i--;
+                Destroy(go);
+                continue;
+            }
 
 
             Collider collider = go.GetComponent<Collider>();
