@@ -33,6 +33,8 @@ public class Human : Spotter
         panicTime -= Time.deltaTime;
         investigateTime -= Time.deltaTime;
 
+        indicator.SetActive(knowsPlayerIsVampire);
+
         if (isPolice)
         {
             UpdatePoliceAI();
@@ -45,7 +47,6 @@ public class Human : Spotter
 
     public void UpdateCivilianAI()
     {
-        indicator.SetActive(IsInPanic());
         bool canSeePlayer = IsPointInCone(player.transform.position);
         bool canSeeCorpse = CanSeeCorpse();
         bool canSeePanicPerson = CanSeePanicHuman();
