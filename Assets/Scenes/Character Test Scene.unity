@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eaf452c308549d4bbbbfb3b52e3d8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  coinPrefab: {fileID: 5754455346352705002, guid: ea734df5a067ca9489406150de5629a8, type: 3}
 --- !u!4 &283972679
 Transform:
   m_ObjectHideFlags: 0
@@ -7084,6 +7085,14 @@ PrefabInstance:
     - target: {fileID: 4985866043004514597, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_Interpolate
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5622821065544158817, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
+      propertyPath: m_Height
+      value: 1.7273164
+      objectReference: {fileID: 0}
+    - target: {fileID: 5622821065544158817, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
+      propertyPath: m_Center.y
+      value: 0.8278706
       objectReference: {fileID: 0}
     - target: {fileID: 6654069958042725622, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_LocalPosition.x
