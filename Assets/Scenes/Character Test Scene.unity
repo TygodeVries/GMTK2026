@@ -5174,7 +5174,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 11579568
+    rgba: 4289769648
   m_fontColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6623,8 +6623,8 @@ Transform:
   m_GameObject: {fileID: 886904812}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.9, y: 37.6, z: -2.32}
-  m_LocalScale: {x: 17.325, y: 17.325, z: 17.325}
+  m_LocalPosition: {x: 70.2, y: 37.6, z: 81}
+  m_LocalScale: {x: 45.19573, y: 45.19573, z: 45.19573}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -7398,7 +7398,7 @@ PrefabInstance:
       objectReference: {fileID: 1896978131}
     - target: {fileID: 3517395534611811629, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: normalSpeed
-      value: 4.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4985866043004514597, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_Interpolate
