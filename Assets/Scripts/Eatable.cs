@@ -18,8 +18,8 @@ public class Eatable : MonoBehaviour
         gameObject.AddComponent<Corpse>();
 
         // Start eating animation
-        GameObject censorObject = GameObject.Instantiate(censorPrefab);
-        censorObject.transform.position = transform.position;
+        GameObject censorObject = GameObject.Instantiate(censorPrefab, gameObject.transform);
+//        censorObject.transform.position = gameObject.transform.position;
 
         yield return new WaitForSeconds(4);
         // Spawn some gold
