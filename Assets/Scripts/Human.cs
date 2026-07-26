@@ -9,6 +9,7 @@ public class Human : Spotter
     private static List<Human> activeHumans = new List<Human>();
     [SerializeField] private bool isPolice;
     [SerializeField] private GameObject indicator;
+
     private void OnEnable()
     {
         activeHumans.Add(this);
