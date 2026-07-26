@@ -16,11 +16,7 @@ public class Coffin : MonoBehaviour
     // Called by external script
     public void OnLevelReady()
     {
-        Coin[] coins = FindObjectsByType<Coin>();
-        foreach (Coin coin in coins)
-        {
-            maxScore += coin.coinCount;
-        }
+        maxScore = 10;
         UpdateText();
 
 
