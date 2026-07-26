@@ -58,7 +58,11 @@ public class Boid : MonoBehaviour
             velocity = Vector2.zero;
         }
 
-        position += velocity * Time.deltaTime * speed;
+        float tmp_speed = speed;
+        if (GetComponent<Human>() is Human h && h.IsInPanic())
+            tmp_speed *= 2;
+
+        position += velocity * (Time.deltaTime * tmp_speed);
         position = worldManager.BumpWithWorld(position, false);
         transform.position = new Vector3(position.x, 0, position.y);
         transform.rotation = Quaternion.LookRotation(new Vector3(velocity.x, 0, velocity.y));
