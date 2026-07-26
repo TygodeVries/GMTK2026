@@ -263,8 +263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed5edf8605014614894af7ba3abaea7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingBoundingBox
-  Size: {x: 2.38, y: 4.45}
-  minimum_distance: 1
+  Size: {x: 3, y: 5}
+  minimum_distance: 10
 --- !u!1 &7634868149477600680
 GameObject:
   m_ObjectHideFlags: 0

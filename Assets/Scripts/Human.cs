@@ -72,14 +72,14 @@ public class Human : Spotter
         // Huh, there is a dead guy, run away from them!
         if (canSeeCorpse)
         {
-            Panic(10, GetNearestCorpse().transform.position);
+            Panic(5, GetNearestCorpse().transform.position);
             return;
         }
 
         // Wow someone is in panic, lets run away from them!
         if (canSeePanicPerson)
         {
-            Panic(10, GetNearestPanicHuman().transform.position);
+            Panic(2, GetNearestPanicHuman().transform.position);
             return;
         }
     }
@@ -203,6 +203,27 @@ public class Human : Spotter
         return nearestHuman;
     }
 
+    private Human? GetNearestPolice()
+    {
+        float nearestDistance = 1000;
+        Human nearestHuman = null;
+        foreach (Human human in Human.activeHumans)
+        {
+            if (human == this)
+                continue;
+            if (!human.isPolice)
+                continue;
+
+            float distance = Vector3.Distance(human.transform.position, transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestHuman = human;
+            }
+        }
+
+        return nearestHuman;
+    }
 
 
     private float panicTime = 0;
@@ -263,6 +284,15 @@ public class Human : Spotter
         {
             Debug.DrawLine(transform.position, investigatePoint, Color.green);
             return WorldDeltaToMapDirection(investigatePoint - transform.position).normalized;
+        }
+
+        if (isPolice)
+        {
+            Human? nearest_cop = GetNearestPolice();
+            if (nearest_cop != null)
+            {
+                return -0.1f * WorldDeltaToMapDirection(nearest_cop.transform.position - transform.position).normalized;
+            }
         }
 
         // idk
