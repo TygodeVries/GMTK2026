@@ -27,7 +27,7 @@ public class LevelGenerator : MonoBehaviour
             go.transform.position = new Vector3(Random.Range(0f, 100f), 0, Random.Range(0f, 100f));
             go.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
 
-            if (Vector3.Distance(go.transform.position, coffin.transform.position) < 10)
+            if (Vector3.Distance(go.transform.position, coffin.transform.position) < 15)
             {
                 i--;
                 Destroy(go);
