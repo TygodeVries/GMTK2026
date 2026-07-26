@@ -142,7 +142,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0}
   position: {x: 0, y: 0}
   minimize_distance: 2.5
-  speed: 2
+  speed: 4
   speed_weight: 1
   is_cop: 0
 --- !u!114 &3342498134737187828

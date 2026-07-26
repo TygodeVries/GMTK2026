@@ -256,7 +256,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0}
   position: {x: 0, y: 0}
   minimize_distance: 1.5
-  speed: 3.5
+  speed: 5
   speed_weight: -2
   is_cop: 1
 --- !u!114 &2768510884940061481
@@ -272,6 +272,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Eatable
   censorPrefab: {fileID: 4560779461844214113, guid: 29ccfaea7307f844dba4074a300e6e6a, type: 3}
+  coinPrefab: {fileID: 0}
+  coinAmount: 0
   eaten: 0
 --- !u!114 &3073530714127877407
 MonoBehaviour:
@@ -285,8 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31085fdd60a2394c89cafb87448bdbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Human
-  angle: 45
-  length: 10
+  angle: 90
+  length: 20
   isPolice: 1
   indicator: {fileID: 3060243901656918488}
 --- !u!1001 &4184840396351773798
