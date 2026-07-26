@@ -5172,6 +5172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   buildingPrefabs:
+  - {fileID: 8594919128110776819, guid: 95cbfc60331ea234aa28134bb6e66dd3, type: 3}
+  - {fileID: 8594919128110776819, guid: dcc2ea27e6b88034098c1a7bf8739abf, type: 3}
   - {fileID: 8594919128110776819, guid: ba85fb8cae85049448ff90a3f90f5ed3, type: 3}
   OnLevelGenerationComplete:
     m_PersistentCalls:

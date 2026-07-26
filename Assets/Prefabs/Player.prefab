@@ -9963,7 +9963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f918e086773d5e4b9f765ac833eb889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  normalSpeed: 8
+  normalSpeed: 3
   modelTransform: {fileID: 7022611865796025701}
   smokeSystem: {fileID: 887708749964684790}
   moveAction:
