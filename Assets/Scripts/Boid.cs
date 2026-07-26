@@ -51,7 +51,17 @@ public class Boid : MonoBehaviour
         {
             Vector2 tmp_velocity = (target_position - position).normalized;
             velocity = (0.9f * velocity) + (0.1f * tmp_velocity);
-            velocity = velocity.normalized;
+
+            if (is_cop)
+            {
+                float mag = Mathf.Max(1, velocity.magnitude);
+                velocity /= mag;
+
+            }
+            else
+            {
+                velocity = velocity.normalized;
+            }
         }
         if (GetComponent<Eatable>() is Eatable eatable && eatable.eaten)
         {

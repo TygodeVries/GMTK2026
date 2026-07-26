@@ -106,6 +106,7 @@ public class Human : Spotter
         if (canSeePlayer && knowsPlayerIsVampire)
         {
             Investigate(5, player.transform.position);
+            Debug.DrawLine(transform.position, player.transform.position, Color.blue);
             return;
         }
 
@@ -121,7 +122,12 @@ public class Human : Spotter
         // Wow someone is in panic, lets help!
         if (canSeePanicPerson)
         {
-            Investigate(3, GetNearestPanicHuman().transform.position);
+            Human nearest = GetNearestPanicHuman();
+
+            Investigate(3, nearest.transform.position);
+            if (nearest.knowsPlayerIsVampire)
+                knowsPlayerIsVampire = true;
+
             return;
         }
     }

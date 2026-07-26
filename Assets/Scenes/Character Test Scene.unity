@@ -6976,6 +6976,10 @@ PrefabInstance:
       propertyPath: eatInput
       value: 
       objectReference: {fileID: 1896978131}
+    - target: {fileID: 3517395534611811629, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
+      propertyPath: normalSpeed
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4985866043004514597, guid: bffc2c884515fc94a8e4b214baa09935, type: 3}
       propertyPath: m_Interpolate
       value: 0
