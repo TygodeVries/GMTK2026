@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Eatable
   censorPrefab: {fileID: 4560779461844214113, guid: 29ccfaea7307f844dba4074a300e6e6a, type: 3}
+  coinPrefab: {fileID: 5754455346352705002, guid: ea734df5a067ca9489406150de5629a8, type: 3}
+  coinAmount: 5
   eaten: 0
 --- !u!114 &6536675149632657386
 MonoBehaviour:

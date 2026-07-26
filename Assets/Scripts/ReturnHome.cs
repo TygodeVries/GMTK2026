@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ReturnHome : MonoBehaviour
 {
+    [SerializeField] private GameObject coinPrefab;
     private void Start()
     {
         transform.GetChild(0).gameObject.SetActive(false);
@@ -15,6 +16,9 @@ public class ReturnHome : MonoBehaviour
 
     private IEnumerator Do()
     {
+
+        int gold = FindAnyObjectByType<Purse>().goldInPurse;
+
         transform.GetChild(0).gameObject.SetActive(true);
         PlayerMovement player = FindAnyObjectByType<PlayerMovement>();
         Coffin coffin = FindAnyObjectByType<Coffin>();
@@ -25,7 +29,17 @@ public class ReturnHome : MonoBehaviour
         FindAnyObjectByType<Purse>().goldInPurse = 1;
         FindAnyObjectByType<CameraController>().targetTransform = transform;
         GetComponent<ParticleSystem>().Emit(50);
-        yield return new WaitForSeconds(0.3f);
+
+        for (int i = 0; i < gold; i++)
+        {
+            GameObject go = GameObject.Instantiate(coinPrefab);
+            Rigidbody body = go.GetComponent<Rigidbody>();
+            body.transform.position = transform.position + new Vector3(0, 2, 0);
+            body.linearVelocity = new Vector3(Random.Range(-4, 4), 5, Random.Range(-4, 4));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
         player.transform.position = coffin.transform.position - new Vector3(0, 3, 0);
         for (float t = 0; t < 1; t += Time.deltaTime)
         {
