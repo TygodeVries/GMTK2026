@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
             smokeSystem.Stop();
 
             FindAnyObjectByType<ReturnHome>().Return();
+            spotTime = 0;
         }
 
         if (spotTime > 0 && spotTime < maxSpotTime && !smokeIsPlaying)
